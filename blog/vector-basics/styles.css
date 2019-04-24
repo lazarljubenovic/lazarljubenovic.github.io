@@ -1,0 +1,21 @@
+figure canvas {
+  background-color: white;
+  border: 1px solid #0074D9; }
+
+.horizontal {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; }
+
+.horizontal > canvas {
+  margin: 1rem; }
+
+#linear-combination-two-vectors .controls {
+  display: flex;
+  flex-direction: column; }
+
+#linear-combination-two-vectors .controls label {
+  display: flex; }
+
+#linear-combination-two-vectors .controls label > * + * {
+  margin-left: 1rem; }

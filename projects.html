@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Lazar Ljubenović</title>
+  <link rel="stylesheet" href="global.css">
+</head>
+
+<body class="projects">
+
+<header id="site-header">
+
+  <div id="logo">Lazar Ljubenović</div>
+
+  <nav>
+    <ul>
+      <li><a href="/">Blog</a></li>
+      <li><a>Projects</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </nav>
+
+</header>
+
+<main>
+
+  <section id="intro">
+    <p>
+      I write about computer science algorithms, maths and web-development.
+    </p>
+  </section>
+
+  <section id="projects">
+    <h1>Projects</h1>
+    <ol>
+      <li>
+        <article>
+          <h2>Grassy</h2>
+          <div class="links">
+            <a href="https://github.com/lazarljubenovic/grassy">GitHub</a>
+          </div>
+          <p>
+            A Sass mixin library which lets you draw an ASCII grid as a Sass string and have elements positioned in a
+            grid as specified.
+            I made this before CSS grid was a thing, so it's kind of irrelevant now.
+            Still, creating a <b>tokenizer and parser in Sass</b> was a fun challenge and it made me realize just what
+            Sass
+            is capable of.
+          </p>
+        </article>
+      </li>
+      <li>
+        <article>
+          <h2>Wane</h2>
+          <div class="links">
+            <a href="https://github.com/wane/wane">GitHub</a>
+            |
+            <a href="https://www.wane.app/">Official site</a>
+          </div>
+          <p>
+            A framework, bundler and optimized, all in one.
+            A proof-of-concept project for my Master's Thesis in Computer Science degree.
+            It <b>statically analyzes code</b> and performs various optimizations on the <i>framework</i> level,
+            instead of the general <i>language</i> level (such as UglifyJS/terser).
+            A Hello World project's bundle comes out at 166 bytes.
+          </p>
+        </article>
+      </li>
+      <li>
+        <article>
+          <h2>Angular Common Forms</h2>
+          <div class="links">
+            <a href="https://github.com/lazarljubenovic/ngx-common-forms">GitHub</a>
+            |
+            <a href="https://stackblitz.com/edit/ngx-common-forms">Demo</a>
+          </div>
+          <p>
+            A collection of <b>low-level Angular directives</b> for handling all the nitty-gritty details when
+            users deal with the form: focus management, displaying client and server errors, disabling submission
+            while the form is submitting, etc.
+            All that, achievable in a declarative way, utilizing existing standard Angular Forms modules.
+          </p>
+        </article>
+      </li>
+      <li>
+        <article>
+          <h2>Type Guards</h2>
+          <div class="links">
+            <a href="https://github.com/lazarljubenovic/type-guards">GitHub</a>
+          </div>
+          <p>
+            A tiny TypeScript module packed with utility functions for easily creating <b>strongly typed validation
+            rules</b>.
+            By creating a runtime validator, you automatically get a TypeScript type to go with it.
+            This means that your codebase can have validators “just in case”, but if you never use them, it will not
+            increase your bundle size.
+          </p>
+        </article>
+      </li>
+    </ol>
+  </section>
+
+  <p>
+    More to come...
+  </p>
+
+</main>
+
+<footer>
+
+</footer>
+
+</body>
+
+</html>
+

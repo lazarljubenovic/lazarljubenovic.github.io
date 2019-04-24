@@ -1,0 +1,277 @@
+:root {
+  --color-aqua: #7FDBFF;
+  --color-blue: #0074D9;
+  --color-navy: #001F3F;
+  --color-teal: #39CCCC;
+  --color-green: #2ECC40;
+  --color-olive: #3D9970;
+  --color-lime: #01FF70;
+  --color-yellow: #FFDC00;
+  --color-orange: #FF851B;
+  --color-red: #FF4136;
+  --color-fuchsia: #F012BE;
+  --color-purple: #B10DC9;
+  --color-maroon: #85144B;
+  --color-white: #FFFFFF;
+  --color-silver: #DDDDDD;
+  --color-gray: #AAAAAA;
+  --color-black: #111111; }
+
+[hidden] {
+  display: none !important; }
+
+@font-face {
+  font-family: 'Computer Modern';
+  src: url("cmunrm.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Computer Modern';
+  src: url("cmunbx.woff") format("woff");
+  font-weight: bold;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Computer Modern';
+  src: url("cmunti.woff") format("woff");
+  font-weight: normal;
+  font-style: italic; }
+
+a {
+  color: #0074D9; }
+
+a[href]:hover, a[href]:focus {
+  color: black; }
+
+a:not([href]) {
+  cursor: default; }
+
+body {
+  margin: 0;
+  padding-top: 6rem;
+  font: calc(110% + 0.6vw) "Computer Modern", sans-serif;
+  width: calc(100% - 1rem - 6vw);
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #fafafa;
+  color: #000000DD;
+  overflow-y: scroll; }
+
+header#site-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%; }
+
+header#site-header #logo {
+  margin-left: -.12em; }
+
+header#site-header nav {
+  display: flex; }
+
+header#site-header ul {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+
+header#site-header li {
+  display: inline-block;
+  margin: 0;
+  padding: 0; }
+
+header#site-header li + * {
+  margin-left: 1em; }
+
+figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 0;
+  margin-right: 0; }
+
+figure > * {
+  max-width: 100%; }
+
+figure figcaption {
+  font-size: 0.66em;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  text-align: center; }
+
+figure > * + * {
+  margin-top: 2rem; }
+
+#logo {
+  font-weight: bold;
+  font-size: 2.66em; }
+
+.katex {
+  font-size: 1em !important;
+  font-family: KaTeX_Main, 'Computer Modern' !important; }
+
+button.inline {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  font-style: italic;
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 0, 0, 0.33); }
+
+pre code {
+  font-size: .72em;
+  line-height: 1.2; }
+
+code {
+  font-size: .84em; }
+
+details {
+  font-size: .86em;
+  margin-left: 2em;
+  margin-right: 2em; }
+
+section#articles > h1,
+section#projects > h1 {
+  font-size: 2em;
+  margin-left: -0.08em; }
+
+section#articles > ol,
+section#projects > ol {
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+
+section#articles > ol > * + *,
+section#projects > ol > * + * {
+  margin-top: 1rem; }
+
+section#articles > ol > li,
+section#projects > ol > li {
+  padding-left: 0; }
+
+section#articles > ol > li > article,
+section#projects > ol > li > article {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  justify-content: space-between; }
+
+section#articles > ol > li > article > h2,
+section#projects > ol > li > article > h2 {
+  font-size: 1.33em;
+  margin: 0;
+  margin-bottom: -0.12em;
+  margin-right: 1em; }
+
+section#articles > ol > li > article > .links,
+section#projects > ol > li > article > .links {
+  text-align: right; }
+
+section#articles > ol > li > article > .links > a,
+section#projects > ol > li > article > .links > a {
+  display: inline-block; }
+
+section#articles > ol > li > article > p,
+section#projects > ol > li > article > p {
+  grid-column: 1 / -1; }
+
+section#articles > ol > li > article > p > a,
+section#projects > ol > li > article > p > a {
+  float: right; }
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden; }
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 5px 0;
+  background: transparent; }
+
+input[type=range]:focus {
+  outline: none; }
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 0;
+  cursor: pointer;
+  box-shadow: 0 0 0 #000000, 0 0 0 #0d0d0d;
+  background: #000000;
+  border-radius: 0;
+  border: 1px solid rgba(0, 0, 0, 0); }
+
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(13, 13, 13, 0);
+  border: 1px solid #000000;
+  height: 10px;
+  width: 10px;
+  border-radius: 50px;
+  background: #ffffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -6px; }
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #030303; }
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 0;
+  cursor: pointer;
+  box-shadow: 0 0 0 #000000, 0 0 0 #0d0d0d;
+  background: #000000;
+  border-radius: 0;
+  border: 1px solid rgba(0, 0, 0, 0); }
+
+input[type=range]::-moz-range-thumb {
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(13, 13, 13, 0);
+  border: 1px solid #000000;
+  height: 10px;
+  width: 10px;
+  border-radius: 50px;
+  background: #ffffff;
+  cursor: pointer; }
+
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 0;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent; }
+
+input[type=range]::-ms-fill-lower {
+  background: #000000;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 0;
+  box-shadow: 0 0 0 #000000, 0 0 0 #0d0d0d; }
+
+input[type=range]::-ms-fill-upper {
+  background: #000000;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 0;
+  box-shadow: 0 0 0 #000000, 0 0 0 #0d0d0d; }
+
+input[type=range]::-ms-thumb {
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(13, 13, 13, 0);
+  border: 1px solid #000000;
+  height: 10px;
+  width: 10px;
+  border-radius: 50px;
+  background: #ffffff;
+  cursor: pointer;
+  height: 0; }
+
+input[type=range]:focus::-ms-fill-lower {
+  background: #000000; }
+
+input[type=range]:focus::-ms-fill-upper {
+  background: #030303; }

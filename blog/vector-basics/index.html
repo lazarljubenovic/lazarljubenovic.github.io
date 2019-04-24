@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vector Basics</title>
+  <link rel="stylesheet" href="../../global.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <h1>Vector Basics</h1>
+</header>
+
+<main>
+  <article>
+
+    <section>
+      <p>
+        In physics, force cannot be described with a simple number.
+        For example, the strength that we put into pushing a box is not enough to properly describe what will happen as
+        a result of that action: we also need to know the direction in which we're pushing (or pulling) to figure out
+        the final destination.
+      </p>
+
+      <p>
+        These kinds of quantities are described with <b>vectors</b>.
+        In maths, the term “vector” can be used for various purposes, sometimes seemingly unrelated:
+        ordered pairs, points on a plane, complex numbers, polynomials, etc.
+        In geometry, the term is often related to <b>directed segment</b> (drawn as an arrow),
+        but we'll later see how these terms are are similar, but why they are different.
+      </p>
+
+      <p>
+        I believe that, before coming to this article, you’ve had some idea of what’s a vector.
+        The point of this article, however, is to re-introduce this term again, in a more-or-less strict mathematical
+        way,
+        as well the basics of some operations which are important for computer graphics.
+        Developers are sometimes confused about terminology related to computer graphic algorithms
+        because they dive straight into $x$ and $y$ coordinates, while imagining a vector as nothing more than an arrow.
+      </p>
+
+      <p>
+        I'm writing this for those who want to know (almost) the complete story and who are not afraid of a some
+        mathematical notation.
+        The article is full of interactive diagrams which will help with intuitively and visually digesting abstract
+        equations.
+      </p>
+
+      <p>
+        So, you're in a good place if you’ve worked with vectors before (either on paper or in code), but every now
+        and then you start pondering about something that really seems basic and you “kinda get it, but can’t precisely
+        explain it”.
+        What <i>exactly</i> defines a vector?
+        Why can we move it around the plane, but not rotate it?
+        Where did the coordinate system come from and why does it work so nicely?
+        What are Cartesian coordinates? What about polar coordinates?
+        How is vector different from a directed segment, apart from both having a defined direction?
+      </p>
+    </section>
+
+    <section>
+      <h2>What’s exactly a vector?</h2>
+
+      <p>
+        Let’s firstly define a directed segment.
+        In a <b>directed segment</b> $\overrightarrow{AB}$, we recognize two points: $A$ is a starting point аnd $B$ is
+        an ending point.
+        This is what separates directed segments from regular segments,
+        in which two points are treated as equals and neither is differently from the other.
+      </p>
+
+      <p>
+        For two directed segments $\overrightarrow{AB}$ and $\overrightarrow{CD}$, we say that they are equal if they
+        share the same direction and if their lengths are equal.
+        Note that the definition doesn’t mention the relative position of $A$ and $C$ (or $B$ and $D$),
+        but it exclusively talks about direction and length.
+      </p>
+
+      <figure id="directed-segments">
+        <figcaption>
+          Directed segments
+          <span style="color: var(--color-red)">$\overrightarrow{AB}$</span>,
+          <span style="color: var(--color-blue)">$\overrightarrow{CD}$</span>
+          and
+          <span style="color: var(--color-green)">$\overrightarrow{EF}$</span>
+          are equal among one another.
+          <br>
+          <span style="color: var(--color-fuchsia)">$\overrightarrow{PQ}$</span>
+          is aligned with those three, but has the opposite direction.
+          <br>
+          <span style="color: var(--color-aqua)">$\overrightarrow{RS}$</span>
+          is not equal with the first three because of its different direction (although their lengths match).
+          <br>
+          <span style="color: var(--color-orange)">$\overrightarrow{TU}$</span>
+          isn’t equal either: they don’t share length nor direction.
+        </figcaption>
+      </figure>
+
+      <p>
+        This is how we're taken to the term <b>vector</b> (until now, everything was about directed segments).
+        If two directed segments $\overrightarrow{AB}$ and $\overrightarrow{CD}$ are equal, it’s said that they
+        belong to the same <b>equivalence class</b>.
+        We denote this class by using a lowercase character with an arrow above it, e.g. $\vec u$,
+        and <i>this</i> class is what we call a <b>vector</b>.
+        Strictly speaking, $\vec u$ is a <b>notation</b> for a group of vectors $\overrightarrow{AB}$,
+        $\overrightarrow{CD}$,
+        and all other mutually equal vectors; however, in practice, we usually just write the equality sign:
+        \[ \vec u = \overrightarrow{AB} = \overrightarrow {CD}. \]
+      </p>
+
+      <p>
+        So, vector itself <i>doesn’t have a starting point</i>.
+        Only two things define a vector: its <b>magnitude</b> (also “length” or “norm”; written as $|\vec x|$)
+        and its <b>direction</b>.
+      </p>
+
+      <p>
+        That’s why, even though we draw a vector as a segment with an arrow at one end,
+        a vector is actually much more similar to a single point (as opposed to a segment, which is determined by
+        <i>two</i> points).
+        Only when we assign the statring point $O$ to a vector $\vec x$, we get another point $X$, thus defining
+        a directed segment $\overrightarrow{OX}$, and hence a regular segment $OX$ as well.
+      </p>
+
+      <figure id="vector-vs-directed-segment">
+        <div class="horizontal">
+          <canvas></canvas>
+          <canvas></canvas>
+        </div>
+        <figcaption>
+          A vector <span style="color: var(--color-blue)">$\vec u$</span> and a corresponding directed segment
+          <span style="color: var(--color-red)">$\overrightarrow{OX}$</span>.
+          <br>
+          The vector and the starting point of the directed segment are interactive.
+        </figcaption>
+      </figure>
+
+    </section>
+
+    <section>
+      <h2>Vector addition and vector subtraction</h2>
+
+      <p>
+        The article opened referencing physics and pushing a box.
+        What happens when two people are pushing a box from different directions?
+        How do we know how much will the box move and where will it end up?
+        We need to <b>add</b> these two forces together.
+      </p>
+
+      <p>
+        How to add vectors $\vec u$ and $\vec v$?
+        Firstly, remember that these are only names for a set of all directed segments with the same direction and
+        magnitude.
+        Let’s arbitrarily choose one of the directed segments which corresponds to the first vector $\vec u$,
+        and name it $\vec u = \overrightarrow{AB}$.
+        Now, we <i>could</i> randomly choose the directed segment for the second vector as well, but
+        let’s be more specific:
+        how about making its starting point exactly $B$ (the endpoint of the first directed segment)?
+        Once we choose $B$, we automatically get the endpoint $C$, such that $\vec v = \overrightarrow{BC}$.
+      </p>
+
+      <figure id="vector-addition">
+        <div class="horizontal">
+          <canvas width="200" height="200"></canvas>
+          <canvas width="200" height="200"></canvas>
+        </div>
+        <figcaption>
+          Directed segments <span style="color: var(--color-blue)">$\vec u$</span> and
+          <span style="color: var(--color-red)">$\vec v$</span>,
+          and their corresponding directed segments, concatenated.
+          <br>
+          The endpoints of the vector on the left are interactive, as well as the starting point $A$ on the right.
+        </figcaption>
+      </figure>
+
+      <p>
+        Let’s pause here and take a look and what we’ve got now:
+        a directed segments starts at $A$, goes to $B$; then another one starts at $B$ and goes to $C$.
+      </p>
+
+      <p>
+        We <i>concatenated</i> two directed segments.
+        The point $B$ acts as a “glue” between them, while the remaining free points are $A$ (starting point)
+        and $B$ (ending point).
+        he directed segment $\overrightarrow{AC}$ is exactly how we define the <b>sum</b> of directed segments
+        $\overrightarrow{AB}$ and $\overrightarrow{BC}$:
+
+        \[ \overrightarrow{AB} + \overrightarrow{BC} = \overrightarrow{AC}. \]
+      </p>
+
+      <figure id="vector-addition-with-result">
+        <div class="horizontal">
+          <canvas width="200" height="200"></canvas>
+          <canvas width="200" height="200"></canvas>
+        </div>
+        <figcaption>
+          Process of adding directed segments <span style="color: var(--color-blue)">$\vec u$</span> and
+          <span style="color: var(--color-red)">$\vec v$</span> by concatenating.
+        </figcaption>
+      </figure>
+
+      <p>
+        Let $\vec w$ be the vector corresponding to the directed segment $\overrightarrow{AC}$.
+        Now can also write the following:
+
+        \[ \vec u + \vec v = \vec w. \]
+      </p>
+
+      <p>
+        It’s worth noting that the order of choosing vectors is irrelevant:
+        we could’ve chosen the vector $\vec v$ firstly, and then vector $\vec u$.
+        The resulting directed segment would remain the same.
+        If you represent both ways of choosing the order of vectors, you get a parallelogram.
+      </p>
+
+      <figure id="vector-addition-parallelogram">
+        <div class="horizontal">
+          <canvas width="200" height="200"></canvas>
+          <canvas width="200" height="200"></canvas>
+        </div>
+        <figcaption>
+          Two ways to add two vectors together.
+        </figcaption>
+      </figure>
+
+      <p>
+        In other words, vector addition is a <b>commutative oepration</b>:
+
+        \[ \vec u + \vec v = \vec v + \vec u. \]
+      </p>
+
+      <p>
+        When there’s addition, there’s also subtraction.
+        But in order to define it, we must firstly agree on what is an <b>opposite vector</b>.
+      </p>
+
+      <p>
+        It’s quite simple and intuitive:
+        if $\vec u = \overrightarrow{AB}$, then $- \vec u$ is its opposite vector,
+        which corresponds to the directed segment $\overrightarrow{BA}$.
+        It’s easy to see that vectors $\vec u$ and $-\vec u$ have the same lengths.
+        Furthermore, even though they are aligned, their directions are opposite.
+      </p>
+
+      <figure id="inverse-vector">
+        <div class="horizontal">
+          <canvas></canvas>
+          <canvas></canvas>
+        </div>
+        <figcaption>
+          Vector $\vec u$ and its opposite vector $-\vec u$.
+        </figcaption>
+      </figure>
+
+      <p>
+        That’s how we get to <b>subtraction</b>.
+        The difference between vectors $\vec u$ and $\vec v$ is defined as a sum of the vector $\vec u$ and
+        the vector opposite of vector $\vec v$, i.e. as $(\vec u) + (-\vec v)$.
+        It’s common to drop the formalities and just write this as $\vec u - \vec v$.
+      </p>
+
+    </section>
+
+    <section>
+      <h2>Product of a number and a vector</h2>
+
+      <p>
+        We’ve seen how addition of two vectors $\vec u$ and $\vec v$ is defined.
+        There’s nothing weird about adding together two same vectors: $\vec u + \vec u$.
+        It’s sorta comes natural to label this as $2\vec u$.
+        So let’s explore this multiplication of a number (a scalar) and a vector.
+      </p>
+
+      <p>
+        The above “definition” might make sense at first:
+        in order to get $100 \vec u$, we need to perform 99 additions.
+        But what if the number on the left isn’t a natural number?
+        What if, instead of $100 \vec u$, we need to calculate $0.5 \vec u$?
+        Or $\sqrt 2 \vec u$?
+        Or $(-3) \vec u$?
+      </p>
+
+      <p>
+        Even though addition of the same value over and over is a nice start to intuitively understand multiplication,
+        the definition needs to be a bit more formal in order to properly include a broader range of numbers.
+      </p>
+
+      <p>
+        Let $\vec u$ be a given vector and $k \in \mathbb R$ a real number.
+        A product of scalar $k$ and vector $\vec u$ is a vector $\vec w$, such that the following statements are true:
+      </p>
+
+      <ul>
+        <li>
+          magnitude of the resulting vector $\vec w$ is equal to the product of absolute value of scalar $k$
+          and magnitude of vector $\vec u$, i.e. $|\vec w| = |k| \cdot |\vec u|$;
+        </li>
+        <li>
+          vectors $\vec u$ and $\vec w$ are aligned;
+        </li>
+        <li>
+          vectors $\vec u$ and $\vec w$ point to the same direction if $k > 0$, and the opposite direction if $k < 0$.
+        </li>
+      </ul>
+
+      <p>
+        If $k = 0$, the result is the zero-vector, written $\vec 0$.
+        It doesn’t have a direction, but only intensity (which is equal to zero).
+      </p>
+
+      <p>
+        Directly applying the two definitions, it’s possible to give proof to some properties of multiplication and
+        addition:
+        \[ \begin{aligned} k(\vec u + \vec v) & = k \vec u + k \vec v \quad & (k_1 + k_2) \vec u & = k_1 \vec u + k_2
+        \vec u \\ k_1(k_2 \vec u) & = (k_1 k_2) \vec u \quad & 1 \vec u & = \vec u. \end{aligned} \]
+      </p>
+    </section>
+
+    <section>
+      <h2>Collinear vectors</h2>
+
+      <p>
+        We say that two vectors are <b>collinear</b> if they are mutually aligned.
+        That’s the geometric definition, which means that it only applies to an abstract world of imaginary directed
+        lines.
+        In order to be able to mathematically (and thus, in code) describe vectors,
+        we need to describe this characteristic in an algebraic notation as well.
+      </p>
+
+      <p>
+        Let’s define <b>linear combination</b>.
+        Given real numbers $k_1, k_2, \ldots, k_n$ and vectors $\vec u_1, \vec u_2, \ldots, \vec u_n$ different from
+        $\vec 0$,
+        the sum \[ k_1 \vec u_1 + k_2 \vec u_2 + \cdots + k_n \vec u_n \] is called a linear combination of vectors
+        $\vec
+        u_1, \vec u_2, \ldots, \vec u_n$.
+      </p>
+
+      <p>
+        Now, if we can find $k_1, k_2, \ldots, k_n$ such that at least one of them is not zero, for which the equation
+        \[ k_1 \vec u_1 + k_2 \vec u_2 + \cdots + k_n \vec u_n = \vec 0 \] holds, we say that these vectors are
+        <b>linearly dependant</b>.
+      </p>
+
+      <p>
+        If the mentioned equation holds only when $k_1 = k_2 = \cdots = k_n = 0,$ it’s said that vectors are
+        <b>linearly independent</b>.
+      </p>
+
+      <p>
+        It’s worth emphasizing that the solution where all $k$s are zero is always possible.
+        The definitions speak about existence of other solutions.
+        So, in order to prove that vectors are linearly independent, one needs to show that all zeros are the
+        <b>only</b> possible solution.
+        This obvious solution is called a <b>trivial solution</b>, so one can also say that
+        vectors are linearly dependant if at least one non-trivial linear combination which gives the zero-vector
+        exists.
+      </p>
+
+      <p>
+        This might sound confusing (or even useless and senseless), but let’s take a look at how we can interpret
+        this geometrically.
+        The definition of linear combination says that we are allowed to multiply vectors with scalars ($k_1, k_2,$
+        etc), which means that we can prolong them or shorten them, or flip their directions around,
+        but not arbitrarily change the direction (because we cannot rotate them).
+      </p>
+
+      <p>
+        If we manange to get the zero-vector by calculating the sum of these tweaked vectors,
+        then it means that vectors are linearly dependent.
+      </p>
+
+      <figure id="linear-combination-two-vectors">
+        <div class="horizontal">
+          <canvas></canvas>
+          <div class="controls">
+            <div>
+              <label style="color: var(--color-red)">
+                <span>$k_1$</span>
+                <input type="range" min="-4.5" max="4.5" step="1" value="1.5" id="linear-combination-two-vectors-k1">
+              </label>
+            </div>
+            <div>
+              <label style="color: var(--color-blue)">
+                <span>$k_2$</span>
+                <input type="range" min="-4.5" max="4.5" step="1" value="1.5" id="linear-combination-two-vectors-k2">
+              </label>
+            </div>
+          </div>
+        </div>
+        <figcaption>
+          Vecktors <span style="color: var(--color-red)">$\vec u_1$</span> and
+          <span style="color: var(--color-blue)">$\vec u_2$</span>
+          are linearly independent.
+          No matter how we tweak them, no matter which $k_1$ and $k_2$ we choose, we can never make the
+          <b style="color: var(--color-green)">result</b>
+          be $\vec 0$, unless we multiply both vectors by zero.
+        </figcaption>
+      </figure>
+
+      <p>
+        We can picture the above diagram in real life.
+        If we <i>have to</i> move a certain number of steps forwards (or backwards), and if we <i>have to</i> move
+        a certain number of steps to the left (or to the right), it’s not possible to get back to starting position.
+        The only way to do that is to make zero steps forwards and zero steps to the left...
+        which kinda sounds like cheating (and that’s why it’s called a trivial solution).
+      </p>
+
+      <figure id="linear-combination-two-vectors-parallel">
+        <div class="horizontal">
+          <canvas></canvas>
+          <div class="controls">
+            <div>
+              <label style="color: var(--color-red)">
+                <span>$k_1$</span>
+                <input type="range" min="-5" max="5" step="1" value="1"
+                       id="linear-combination-two-vectors-parallel-k1">
+              </label>
+            </div>
+            <div>
+              <label style="color: var(--color-blue)">
+                <span>$k_2$</span>
+                <input type="range" min="-5" max="5" step="1" value="1"
+                       id="linear-combination-two-vectors-parallel-k2">
+              </label>
+            </div>
+          </div>
+        </div>
+        <figcaption>
+          Vectors <span style="color: var(--color-red)">$\vec u_1$</span> and
+          <span style="color: var(--color-blue)">$\vec u_2$</span>
+          are linearly dependent.
+          If we multiply the first vector by $-2$, and the second one by $3$, we get $\vec 0$ as the
+          <b style="color: var(--color-green)">result</b>.
+          <button class="inline" id="linear-combination-two-vectors-parallel-goto">See for yourself.</button>
+        </figcaption>
+      </figure>
+
+      <p>
+        Again, we can discuss the above diagram in terms of real-life steps.
+        If we need to make a few larger steps forwards, and a few smaller steps backwards,
+        then it’s certainly possible to pick how many steps in each direction to make and then end up in the same spot.
+      </p>
+
+      <p>
+        These images should suggest how is linear dependence of vectors connected to vectors being collinear:
+        two (non-zero) vectors $\vec u$ and $\vec v$ are <b>collinear</b> if and only if they are linearly dependent.
+      </p>
+
+      <details class="proof">
+        <summary>Proof.</summary>
+        <p>
+          Firstly let’s just briefly mention the definition of a <b>unit vector</b>:
+          for a vector $\vec u$, that’s a vector $\hat u$ (pronounced as u-hat), such that $\vec u = | \vec u | \cdot
+          \hat u$.
+        </p>
+        <p>
+          $\Rightarrow$ Now, let $\vec u$ and $\vec v$ be parallel vectors pointing at the same direction.
+          Their unit vectors are $\hat u$ and $\hat v$.
+          It’s clear that then $\hat u = \hat v$, and thus
+          \[ {\vec u \over |\vec u|} = {\vec v \over | \vec v|} \quad \text{and hence} \quad {1 \over |\vec u|} \vec u -
+          {1 \over
+          |\vec v|} \vec v = \vec 0, \]
+          which means that the vectors are linearly dependent (the above equation is a linear combination:
+          $k_1 = 1 / |\vec u|$ и $k_2 = -1 / |\vec v|$).
+          The analogous holds when $\vec u$ and $\vec v$ have opposite directions, because then $\hat u = -\hat v$.
+        </p>
+        <p>
+          $\Leftarrow$ If vectors $\vec u$ and $\vec v$ are linearly dependent, by definition we have that $k_1$ and
+          $k_2$ exist (where at least one is non-zero), such that $k_1 \vec u + k_2 \vec v = \vec 0$. This means that
+        </p>
+        <p>
+          <small>The theorem says “if and only if” (also commonly abbreviated as “iff”). When we say “$\mathcal A$ iff
+            $\mathcal B$”, it means “if $\mathcal A$ than $\mathcal B$, and also if $\mathcal B$ than $\mathcal A$”.
+            This is usually written as $\mathcal A \Leftrightarrow \mathcal B$, which nicely illustrates the symmetry of
+            $\mathcal A \Rightarrow B \land \mathcal B \Rightarrow \mathcal A$ or $\mathcal A \Rightarrow \mathcal B
+            \land \mathcal A \Leftarrow \mathcal B$. This is why the proof has two parts: the $\Rightarrow$ direction
+            and the opposite direction $\Leftarrow$.
+          </small>
+        </p>
+      </details>
+
+    </section>
+
+    <section>
+      <h2>Coplanar vectors</h2>
+
+      <p>
+        If three or more vectors are parallel to the same plane, then we say they are <b>coplanar</b>.
+        Again, this is a geometric definition which we will give an algebraic definition.
+        It’s much easier this time around, because we already have linear dependence defined.
+      </p>
+
+      <p>
+        Vectors $\vec u$, $\vec v$ and $\vec w$ are coplanar if and only if they are linearly dependent.
+      </p>
+
+      <details class="proof">
+        <summary>Proof.</summary>
+        <p>
+          Let $\vec u$, $\vec v$ and $\vec w$ be given vectors, coplanar with $\alpha$.
+        </p>
+
+        <ul>
+          <li>
+            <p>
+              If two of them are collinear (say, $\vec u$ and $\vec v$), than we know that a number $k \ne 0$ exists
+              such that $\vec v = k \vec u$ (based on previous talk about collinearity).
+              From there, $k \vec u - \vec v + 0 \vec w = \vec 0$, which means the vectors are linearly dependent.
+            </p>
+          </li>
+          <li>
+            <p>
+              The second case is when no pair of vectors is colinear.
+              Let’s arbitrarily pick a point $O$ from $\alpha$ and notice points $U$, $V$ and $W$ on the same plane
+              such that $\overrightarrow{OU} = \vec u$, $\overrightarrow{OV} = \vec v$ and $\overrightarrow{OW} = \vec
+              w$.
+              Now let’s pick $X$ and $Y$ on segments $OU$ and $OV$, such that $OXWY$ is a parallelogram.
+            </p>
+            <p>
+              Based on the fact that $\overrightarrow{OX}$ and $\overrightarrow{OV}$ are collinear, we know
+              that there is a unique $k_1 \ne 0$ such that $\overrightarrow{OX} = k_1 \overrightarrow{OV}$.
+              Similarly, a $k_2 \ne 0$ exists such that $\overrightarrow{OY} = k_2 \overrightarrow{OU}$.
+              From here, we have
+              \[ \vec z = \overrightarrow{OW} =
+              \overrightarrow{OX} + \overrightarrow{OY} = k_1 \overrightarrow{OU} + k_2 \overrightarrow{OV} = k_1 \vec u
+              +
+              k_2 \vec v, \]
+              and hence $\vec u$, $\vec v$ and $\vec w$ are linearly dependent.
+            </p>
+          </li>
+        </ul>
+
+        <p>
+          Now for the $\Leftarrow$ direction.
+          If vectors $\vec u$, $\vec v$ adn $\vec w$ are linearly dependent, then numbers $k_1$, $k_2$ and $k_3$ exist
+          (where at least one is non-zero) such that $k_1 \vec u + k_2 \vec v + k_3 \vec w = \vec 0$.
+          Without loss of generality, we assume that $k_3$ is the one different from zero.
+          Now we have $\vec w = p \vec u + q \vec v$, where $p = -k_1 / k_3$ and $q = - k_2 / k_3$.
+          This means that $\vec w$ lies on the same plane as $\vec u$ and $\vec v$.
+        </p>
+      </details>
+
+      <p>
+        Because of this, any three vectors we place on a plane, they will be linearly dependent.
+      </p>
+    </section>
+
+    <section>
+      <h2>Vector decomposition</h2>
+
+      <p>
+        Have you noticed how we haven’t used any numbers until now, nor the coordinate system?
+        The pictures purposely have no grid or axis.
+        We’ve talked about terms which we graphically represent as arrows nad points, but we’ve never mentioned
+        things like $x$ and $y$ coordinates, nor did we assign numerical values to points.
+      </p>
+
+      <p>
+        Actually, in order to define a coordinate system (which will allow us to store point position in computer
+        memory,
+        and then draw it on the screen), <b>linear dependency</b> from the previous chapters plays the key role.
+        Let’s take a look and two vectors $\vec i$ and $\vec j$.
+      </p>
+
+      <p>
+        Say that a vector $\vec u$ is given in the same plane as $\vec i$ and $\vec j$.
+        Based on the previous chapter, we know that we can represent $\vec u$ as linear combination of $\vec i$ and
+        $\vec
+        j$: \[ \vec u = x \vec i + y \vec j. \]
+      </p>
+
+      <p>
+        And there they are: $x$ and $y$.
+        When we can decompose (disassemble) a vector like this (and we can do that for any vector in the plane),
+        we say that $x$ and $y$ are coordinates of $\vec u$ in a system determined by (linearly independent) vectors
+        $\vec
+        i$ and $\vec j$.
+        Vectors $\vec i$ and $\vec j$ are <b>the base of the system</b>.
+      </p>
+
+      <figure id="coordinates-net">
+        <canvas></canvas>
+        <figcaption>
+          A coordinate net based on vectors $\vec i$ and $\vec j$.
+        </figcaption>
+      </figure>
+
+      <p>
+        A well-known coordinate system, called <b>Cartesian coordinate system</b>, is nothing but a system in which the
+        base is formed of two vectors, equal in magnitude and mutually orthogonal (we'll talk more about angles between
+        vectors later).
+        Their intensity if the “unit” of the system.
+      </p>
+
+      <figure id="cartesian-net">
+        <canvas></canvas>
+        <figcaption>
+          Cartesian coordinate system.
+        </figcaption>
+      </figure>
+
+      <p>
+        So, when we say that a vector is defined by a point $\vec u = (x, y)$, there’s an implicit convention going on
+        in the background: the base vectors $\vec i$ and $\vec j$, and the equality $\vec u = x \vec i + y \vec j$.
+      </p>
+
+      <p>
+        This characteristic is important for defining all classic vector operations using their $x$ and $y$ coordinates.
+        That’s why linear dependence is of such importance: that’s the condition which base vectors must satisfy in
+        order
+        to create a coordinate system which can be used to represent any point in such space
+      </p>
+
+      <p>
+        For example, how do we find the sum $\vec w = \vec u + \vec v$ for given vectors $\vec u = (x_u, y_u)$ and $\vec
+        v
+        = (x_v, y_v)$?
+        Well, firstly we rewrite those vectors as linear combinations of the base vectors:
+        \[ \vec u = x_u \vec i + y_u \vec j \quad \text{and} \quad \vec v = x_v \vec i + y_v \vec j. \]
+        Now we get
+        \[ \begin{aligned} \vec u + \vec v & = (x_u, y_u) + (x_v, y_v) \\ & = x_u \vec i + y_u \vec j + x_v \vec i + y_v
+        \vec j \\ & = (x_u \vec i + x_v \vec i) + (y_u \vec j + y_v \vec j) \\ & = (x_u + x_v) \vec i + (y_u + y_v) \vec
+        j \\ & = (x_u + x_v, y_u + y_v), \end{aligned}\]
+        while heavily relying on already discussed properties of vector addition and multiplication by a scalar.
+      </p>
+
+      <p>
+        Similar “obvious” equalities can be proven for subtraction and multiplication by a scalar.
+        Their “obviousness” is the reason why the Cartesian system became a standard way for representing coordinates in
+        analytic geometry, and by extension in computer graphics.
+      </p>
+
+      <p>
+        That’s not the only possible coordinate system.
+        In fact, right off the bat, we’ve introduced a system by the general idea of vectors:
+        they have <i>magnitude</i> and <i>direction</i>.
+        Formally, direction can be defined as an angle based on some pre-determined ray.
+      </p>
+
+      <figure id="polar">
+        <canvas></canvas>
+        <figcaption>
+          Vector $\vec u$ represented using polar coordinates as an ordered pair
+          $\vec u =$
+          <span id="polar-vector-katex">(30.0°, 6.0)</span>.
+        </figcaption>
+      </figure>
+
+      <p>
+        So, a much more natural system can be created directly from the definition:
+        a system where a vector is described with its angle and magnitude, such as $\vec v = (30^\circ, 6)$.
+        The elements of such pair are called <b>polar coordinates</b>.
+        So what’s the problem?
+        If we have this system, why did we go through all the trouble of linear dependency to introduce the Cartesian
+        system?
+      </p>
+
+      <p>
+        Well, given vectors in polar coordinates, say $\vec v = (r_v, \varphi_v)$ and $\vec u = (r_u, \varphi_u)$,
+        then their sum is a new vector $\vec w = (r_w, \varphi_w)$, where
+        \[ \begin{aligned} r_w & = \sqrt{r_u^2 + r_v^2 + 2 r_u r_v \cos (\varphi_v - \varphi_u)} \quad \text{and} \\
+        \varphi_w & = \varphi_u + \operatorname{arctan2} (r_v \sin (\varphi_v - \varphi_u), r_u + r_v \cos (\varphi_v -
+        \varphi_u)). \end{aligned} \]
+      </p>
+
+      <p>
+        Ooh. That’s why.
+      </p>
+
+      <p>
+        Of course, polar coordinates are still pretty useful and sometimes they give us a nice way to repersent a
+        vector.
+        For example, scaling and rotation is much easier done in polar coordinates: one only has to change $r$ or
+        $\varphi$.
+        On the other hand, rotation in Cartesian coordinates is a bit more complex and includes evaluation of
+        trigonometric functions.
+        That’s why the choice of representation should be based on which operations are going to be used more often.
+      </p>
+    </section>
+
+    <section>
+      <h2>Vector product</h2>
+
+      <p>
+        We talked about addition and subtraction, as well as multiplication by a scalar.
+        What about multiplying two vectors?
+      </p>
+
+      <p>
+        Before we start with that, a short notice about naming operators.
+        Why did we give such a name to the operation of vector addition?
+        And why do we use the symbol $+$ for it?
+      </p>
+
+      <p>
+        Only because we’ve proven that the operation exhibits a large enough similarity with the operation
+        of adding two numbers (scalars),
+        which the person is expected to already be familiar with by the time vectors are introduced.
+        This is often the case in maths: the same symbol is used for different (but somehow similar) operations.
+      </p>
+
+      <p>
+        If this were code, the function for adding two numbers and two vectors would have different signatures:
+        one would accept numbers for arguments, and the other ordered pairs (or some equivalent specific for the
+        language).
+        They also have different type of return values.
+        So, there’s no doubt that the operations are different. And yet we use the same symbol.
+      </p>
+
+      <p>
+        However, this doesn’t confuse us the slightest.
+        On the contrary, this helps us intuitively hand-wave some properties of the operations by somehow
+        already accepting their proof without thinking about it, such as $u + v = v = u$ and $\vec u + \vec v = \vec v +
+        \vec u$.
+        Or, for example, if <span style="color: var(--color-red)">$1 + 2 = 3$</span>
+        and
+        <span style="color: var(--color-blue)">$4 + 5 = 9$</span>,
+        why wouldn’t we use the same symbol for an operation where
+        $(\textcolor{#FF4136}{1}, \textcolor{#0074D9}{4}) + (\textcolor{#FF4136}{2}, \textcolor{#0074D9}{5}) =
+        (\textcolor{#FF4136}{3}, \textcolor{#0074D9}{9})$?
+      </p>
+
+      <p>
+        With vector product, however, things are a bit different.
+        Sure, we <i>could</i> define it by multiplying corresponding components and getting a new vector, i.e.
+        \[ \vec u \cdot \vec v = (u_x, u_y) \cdot (v_x, v_y) = (u_x \cdot v_x, u_y \cdot v_y). \]
+        Nobody can stop you from using this if you somehow need it.
+      </p>
+
+      <p>
+        The problem is, this definition is pointless.
+        There’s no pretty properties such an operation would exhibit.
+        There’s no geometric interpretation.
+        All operations we’ve seen until now made sense when drawn as well:
+        addition made translation (shifting) possible,
+        while multiplication by a scalar made change a shape’s size possible.
+      </p>
+
+      <p>
+        That’s why, instead of this, vector multiplication is defined differently.
+        In fact, there are several different vector products, each having different use-cases.
+        Their connection with regular multiplication (such as $2 \cdot 3 = 6$) is less obvious, but we'll get there.
+      </p>
+    </section>
+
+    <section>
+      <h2>Scalar product</h2>
+
+      <p>
+        In terms of geometry, <b>the scalar product of vectors</b> $\vec u$ and $\vec v$ is denoted with an infix dot
+        $\cdot$ and is defined as
+        \[ \vec u \cdot \vec v = | \vec u | | \vec v | \cos \angle (\vec u, \vec v), \]
+        where $\angle (\vec u, \vec v)$ is the angle between $\vec u$ ans $\vec v$.
+      </p>
+
+      <figure id="scalar-product">
+        <canvas></canvas>
+        <figcaption>
+          The scalar product of these vectors is
+          <br>
+          $\vec u \cdot \vec v = |\vec u| |\vec v| \cos \angle(\vec u, \vec v)$ =
+          <span id="scalar-product-result"></span>
+        </figcaption>
+      </figure>
+
+      <p>
+        It’s important to emphasize something from this definition:
+        the result of scalar product is a <i>scalar</i> (a number), not a evctor.
+        That’s why it’s called <i>scalar</i> product.
+      </p>
+
+      <p>
+        Some properties of this operation:
+      </p>
+
+      <ul>
+        <li>
+          Commutativity, i.e. the fact that $\vec u \cdot \vec v = \vec v \cdot \vec u$ holds
+          is a direct consequence of the fact that $\cos \varphi = \cos(-\varphi)$.
+          Multiplication of two scalars also exhibits this property.
+        </li>
+        <li>
+          Unlike scalar multiplication, scalar product of two vector isn’t associative.
+          Furthermore, writing $(\vec u \cdot \vec v) \cdot \vec w = \vec u \cdot (\vec v \cdot \vec w)$
+          doesn’t even make much sense, since the nature (type) of the operands isn’t correct.
+          Scalar product is defined between two vectors, and the result is a scalar.
+          When the parenthesised operation is performed, the two operands left are a scalar and a vector,
+          not a vector and a vector.
+          Even if $\cdot$ “falls back” to multiplication of a scalar and a vector when the operands' types call for it,
+          the left-hand side of the equation will be a vector aligned with $\vec w$, while the right-hand side
+          will be aligned with $\vec u$.
+          These two vectors in general don’t point at the same direction, so the identity doesn’t always hold.
+        </li>
+        <li>
+          Multiplying by a scalar can be done anywhere: $(s\vec u) \cdot \vec v = \vec u \cdot (s \vec v) = s \vec u
+          \cdot \vec v$.
+        </li>
+        <li>
+          Scalar product is distributive over addition, i.e. $(\vec u + \vec v) \cdot \vec w = \vec u
+          \cdot \vec w + \vec v \cdot \vec w$ holds.
+        </li>
+      </ul>
+
+      <p>
+        It’s about time to ask the question: why in the world would you need this operator?
+        What does this mean in terms of geometric interpretation?
+        Why’s there a cosine in the definition; doesn’t that just make things more complex?
+      </p>
+
+      <p>
+        The main reason for such a definition is precisely that cosine.
+        This is the first operation we see that explicitly deals with the angle between vectors.
+      </p>
+
+      <p>
+        A particularly curious angle is $90^\circ$, whose cosine equals zero.
+        That’s when the scalar product would also be zero, i.e. we get <b>the condition for vector perpendicularity</b>:
+        \[ \vec u \cdot \vec v = 0. \]
+      </p>
+
+      <p>
+        Alright, so that’s nice, but how do we compute it?
+        This formula is useless if we firstly have to calculate the angle anyway.
+        Why is it so important then?
+      </p>
+
+      <p>
+        Well, it turns out that there’s a different formula to compute scalar product: an <b>algebraic</b> formula.
+        And it’s actually surprisingly simple.
+        For given vectors $\vec u = (\textcolor{#0074d9}{u_x}, \textcolor{#ff4136}{u_y})$ and $\vec v =
+        (\textcolor{#3d9970}{v_x}, \textcolor{#b10d9c}{v_y})$, the scalar product can be computed as follows:
+        \[ \vec u \cdot \vec v = \textcolor{#0074d9}{u_x} \textcolor{#3d9970}{v_x} + \textcolor{#ff4136}{u_y}
+        \textcolor{#b10d9c}{v_y}. \]
+        And there’s one more reason why it’s called scalar <i>product</i>:
+        it can be computed by adding products of corresponding coordinates.
+        We'll prove this formula, and throw some more scalar product properties here ’n’ there.
+      </p>
+
+      <p>
+        Let's decompose the given vectors $\vec u = (\textcolor{#0074d9}{u_x}, \textcolor{#ff4136}{u_y})$ and $\vec v =
+        (\textcolor{#3d9970}{v_x}, \textcolor{#b10d9c}{v_y})$ into base unit vectors $\vec i$ and $\vec j$:
+        \[ \vec u = \textcolor{#0074D9}{u_x} \vec i + \textcolor{#ff4136}{u_y} \vec j \quad \text{и} \quad \vec v =
+        \textcolor{#3d9970}{v_x} \vec i + \textcolor{#b10dc9}{v_y} \vec j. \]
+        Now, by expanding this expression we get the following.
+        \[
+        \begin{aligned}
+        \vec u \cdot \vec v
+        & = (\textcolor{#0074d9}{u_x} \vec i + \textcolor{#ff4136}{u_y} \vec j) \cdot (\textcolor{#3d9970}{v_x} \vec i +
+        \textcolor{#b10d9c}{v_y} \vec j) \\
+        & = (\textcolor{#0074d9}{u_x} \vec i) \cdot (\textcolor{#3d9970}{v_x} \vec i) + (\textcolor{#0074d9}{u_x} \vec
+        i) \cdot (\textcolor{#b10dc9}{v_y} \vec j) + (\textcolor{#ff4136}{u_y} \vec j) \cdot (\textcolor{#3d9970}{v_x}
+        \vec i) + (\textcolor{#ff4136}{u_y}
+        \vec j) \cdot (\textcolor{#b10dc9}{v_y} \vec j) \\
+        & = \textcolor{#0074d9}{u_x} \textcolor{#3d9970}{v_x} (\vec i \cdot \vec i) + \textcolor{#0074d9}{u_x}
+        \textcolor{#b10dc9}{v_y} (\vec i \cdot \vec j) + \textcolor{#ff4136}{u_y} \textcolor{#3d9970}{v_x} (\vec j \cdot
+        \vec i) + \textcolor{#ff4136}{u_y} \textcolor{#b10dc9}{v_y} (\vec j
+        \cdot \vec j)
+        \end{aligned}
+        \]
+      </p>
+
+      <p>
+        We know that the unit vectors $\vec i$ and $\vec j$ are chosen in such a way that they are mutually
+        perpendicular.
+        This means that their scalar product equals zero.
+        By the way, this is precisely how the coordinate system is defined in algebraic terms:
+        we pick $\vec i$ and $\vec j$ of same magnitude, such that $\vec i \cdot \vec j = \vec j \cdot \vec i = 0$.
+      </p>
+
+      <p>
+        Now we can kick out the two middle terms from the last row (they're zero):
+        \[
+        \begin{aligned}
+        \vec u \cdot \vec v
+        & = \textcolor{#0074d9}{u_x} \textcolor{#3d9970}{v_x} (\vec i \cdot \vec i) + \cancel{\textcolor{#0074d9}{u_x}
+        \textcolor{#b10dc9}{v_y} (\vec i \cdot \vec j)} + \cancel{\textcolor{#ff4136}{u_y} \textcolor{#3d9970}{v_x}
+        (\vec j \cdot \vec i)} +
+        \textcolor{#ff4136}{u_y} \textcolor{#b10dc9}{v_y} (\vec j \cdot \vec j) \\
+        & = \textcolor{#0074d9}{u_x} \textcolor{#3d9970}{v_x} (\vec i \cdot \vec i) + \textcolor{#ff4136}{u_y}
+        \textcolor{#b10dc9}{v_y} (\vec j \cdot \vec j).
+        \end{aligned}
+        \]
+      </p>
+
+      <p>
+        We've left with operands that have unit vectors multiplied by themselves.
+        Let's see how that turns out, using the scalar product definition:
+        \[ \vec u \cdot \vec u = | \vec u | | \vec u | \cos \angle (\vec u, \vec u) = | \vec u | ^ 2 \cos 0 = |\vec
+        u|^2. \]
+      </p>
+
+      <p>
+        Since these are <em>unit</em> vectors, their magnitude is one by definition,
+        so we get
+        \[ \vec i \cdot \vec i = | \vec i |^2
+        = 1^2 = 1
+        \quad \text{and} \quad \vec j \cdot \vec j = |\vec j|^2 = 1^2 = 1, \]
+        which further gives us
+        \[
+        \begin{aligned}
+        \vec u \cdot \vec v
+        & = \textcolor{#0074d9}{u_x} \textcolor{#3d9970}{v_x} (\vec i \cdot \vec i) + \textcolor{#ff4136}{u_y}
+        \textcolor{#b10dc9}{v_y} (\vec j \cdot \vec j) \\
+        & = \textcolor{#0074d9}{u_x} \textcolor{#3d9970}{v_x} + \textcolor{#ff4136}{u_y} \textcolor{#b10dc9}{v_y},
+        \end{aligned}
+        \]
+        and this is exactly what we were trying to prove.
+      </p>
+
+      <p>
+        This formula is amazingly handy for determining if two vectors are perpendicular.
+        All we need to do is two multiplications and then compute their sum: if we get zero, the vectors are
+        perpendicular.
+      </p>
+
+      <p>
+        Apart from determining if vectors are perpendicular, the sign of the scalar product can also be used to check
+        if the vectors form acute (sharp) or obtuse (blunt) angles, which can be handy when we need to check if
+        the vectors are pointing towards the same general direction.
+        For vectors $\vec u$ and $\vec v$, with the angle between them $\varphi = \angle(\vec u, \vec v)$, the following
+        applies.
+
+        \[
+        \begin{aligned}
+        \varphi & \in (0, 90^\circ) & \cos \varphi & \in (0, 1) & \vec u \cdot \vec v & > 0 & \text{acute angle} \\
+        \varphi & = 90^\circ & \cos \varphi & = 0 & \vec u \cdot \vec v & = 0 & \text{right angle} \\
+        \varphi & \in (90^\circ, 180^\circ) & \cos \varphi & \in (-1, 0) & \vec u \cdot \vec v & < 0 & \text{obtuse angle}
+        \end{aligned}
+        \]
+      </p>
+
+    </section>
+
+    <section>
+      <h2>Vector projection</h2>
+
+      <p>
+        Let's go back to vector decomposition.
+        When we say that we're “decomposing” a vector based on unit vectors $\vec i$ and $\vec j$,
+        we're actually computing two of its <b>projections</b>.
+      </p>
+
+      <p>
+        A projection can be understood as a “shadow” of one vector
+        which rays of sun would create if cast perpendicularly towards a different vector.
+        If we project a vector $\vec u$ onto $\vec v$, the result is a vector $\vec w$, which we write as
+        \[ \vec w = \operatorname{proj}_{\vec v}{\vec u}. \]
+      </p>
+
+      <figure id="scalar-projection">
+        <canvas></canvas>
+        <figcaption>
+          Scalar projection of $\vec u$ onto $\vec v$ is $\vec w$.
+        </figcaption>
+      </figure>
+
+      <p>
+        What's the quickest way to compute the magnitude (and direction) of the projection?
+        Let's take a look at the right-angled triangle and mark the angle between $\vec u$ and $\vec v$ as $\varphi$.
+      </p>
+
+      <p>
+        By definition of cosine of an angle inside a right-angled triangle, we know that
+        \[ \cos \varphi = \frac{|\vec w|}{|\vec u|} \qquad \Longleftrightarrow \qquad |\vec w| = |\vec u| \cos \varphi.
+        \]
+        On the other hand, from the geometric definition of scalar product we have
+        \[ \vec v \cdot \vec u = |\vec v| |\vec u| \cos \varphi \qquad \Longleftrightarrow \qquad \cos \varphi =
+        \frac{\vec v \cdot \vec u}{|\vec v| |\vec u|}, \]
+        which is why
+        \[ \begin{aligned} |\vec w| = |\vec u| \cos \varphi = |\vec u| \frac{\vec v \cdot \vec u}{|\vec v| |\vec u|} =
+        \cancel{|\vec u|} \frac{\vec v \cdot \vec u}{|\vec v| \cancel{|\vec u|}} = \frac{\vec v \cdot \vec u}{|\vec v|},
+        \end{aligned} \]
+        where the sign of the result determines wether $\vec w$ points to the same direction as $\vec v$ (when positive)
+        or the opposite direction (when negative).
+      </p>
+
+      <p>
+        Since vector $\vec w$ is aligned with $\vec v$ (either poitning at the same or opposite direction),
+        we can easily compute it by multiplying its length with the unit vector of $\vec v$, i.e.
+        \[ \vec w = |\vec w| {\vec v \over |\vec v|}. \]
+      </p>
+
+      <p>
+        Vectors are often decomposed onto vectors which doesn't necessarily have to be aligned with coordinate
+        system's axis, for example during response phase after a collision has been detected between two objects in
+        games.
+        This is when calculating projections kicks in.
+      </p>
+
+    </section>
+
+    <section>
+      <h2>Vector product</h2>
+
+      <p>
+        Another product that's defined between vectors is called <b>vector product</b>.
+        The result of a scalar product was a scalar, vector product gives a vector.
+      </p>
+
+      <p>
+        However, before we dig in, we need to take a look at how we currently perceive a vector, in algebraic terms:
+        the ordered pair $(x, y)$.
+        This definition assumes that we're talking about two dimension, i.e. about a single plane.
+        What about the third dimension?
+      </p>
+
+      <p>
+        Geometrically, it's obvious what should be done to get to 3D:
+        raise another axis, $z$, which is orthogonal to the plane formed by $x$ and $y$.
+      </p>
+
+      <p>
+        For the algebraic definition, we need to add another unit vector $\vec k$, alongside existing $\vec i$ and $\vec
+        j$, such that $\vec i \cdot \vec j = 0$ continues to hold, while also $\vec i \cdot \vec k = 0$ and
+        $\vec j \cdot \vec k = 0$.
+        So, all unit vectors need to be orthogonal mutually.
+      </p>
+
+      <p>
+        A question remains about which direction shoul the third vector face, i.e. what is “upwards” (from the computer
+        screen towards you) and what is “downwards” (from you towards the back of the computer screen).
+        The answer is offered by applying the <b>right-hand rule</b>: if we grasp the $z$-axis with the right palm,
+        in such a way that fingers firstly pass through the $x$ axis, and then through the $y$ axis,
+        then the direction the thumb points at is the direction of the $z$ axis.
+        This is a standard mathematical coordinate system and these conventions help us easily understand
+        what we're talking about.
+        Such a system is called <b>right-hand system</b>.
+      </p>
+
+      <p>
+        By introducing the vector product in the 2D vector space, we must also introduce the third dimension.
+        This is barely relevant to anything that was discussed until this point.
+        All formulae are easily extensible to more than two coordinates:
+        for example, the algebraic formula for the scalar product becomes $x_u x_v + y_u y_v + z_u z_v$.
+      </p>
+
+      <p>
+        furthermore, a 2D vector $\vec u = (x, y)$ can always be understood simply as a 3D vector on the $xy$ plane,
+        i.e. its $z$ coordinates is zero: $\vec u = (x, y) = (x, y, 0)$.
+      </p>
+
+      <p>
+        Now, let's get back to the vector product.
+        It's denoted with an infix operator $\times$.
+        Its result is a vector, which means the resulting vector $\vec u \times \vec v$ is described by its
+        direction and magnitude.
+      </p>
+
+      <ul>
+        <li>
+          The magnitude of the result is \[ |\vec u \times \vec v| = |\vec u| |\vec v| \sin
+          \angle(\vec u, \vec v). \]
+        </li>
+        <li>
+          The direction of the resulting vector is determined in such a way that $\vec u$, $\vec v$ and $\vec u \times
+          \vec v$ form the right-hand system.
+        </li>
+      </ul>
+
+      <p>
+        Such an operation shows the following properties:
+      </p>
+
+      <ul>
+        <li>
+          It's anti-commutative operation, i.e. $\vec u \times \vec v = - \vec v \times \vec u$.
+          This is because $\sin \varphi = -\sin (-\varphi)$.
+        </li>
+        <li>
+          Associativity doesn't gold, i.e. in general $(\vec u \times \vec v) \times \vec w = \vec u \times (\vec v
+          \times \vec v)$ doesn't hold.
+        </li>
+        <li>
+          As with scalar product, $ (k\vec u) \times \vec v = \vec u \times (k \vec v) = k (\vec u
+          \times \vec v)$ always holds.
+        </li>
+        <li>
+          Also, it's distributive over addition: $\vec u \times (\vec v + \vec w) = (\vec u \times \vec
+          v) + (\vec u \times \vec w)$.
+        </li>
+      </ul>
+
+      <p>
+        So, this operation shares a lot of properties with the scalar product.
+        Even definitions look alike.
+        This justifies that we also call it a type of <em>product</em>.
+      </p>
+
+      <p>
+        We talked about how scalar product can be used to determine if two vectors are mutually perpendicular,
+        since $\cos(90^\circ) = 0$.
+        In a similar fashion, by noticing that $\sin(0^\circ) = 0$, we can use vector product to check if two vectors
+        are collinear (parallel).
+        In other words, <b>the collinearity condition</b> is as follows:
+        \[ \vec u \times \vec v = \vec 0. \]
+      </p>
+
+      <p>
+        What about the algebraic way to define vector product?
+        Well, we can follow the same idea as previously, except this time we'll need to include the third coordinate
+        (since the vector product is defined in at least three dimensions).
+        Starting from
+        \[ \vec u \times \vec v = (x_u \vec i + y_u \vec j + z_u \vec k) \times (x_v \vec i + y_v \vec j + z_v \vec k)
+        \]
+        we get that the coordinates of the vector $\vec w = \vec u \times \vec v$ are:
+        \[
+        \begin{aligned}
+        w_x & = y_u z_v - z_u y_v \\
+        w_y & = -(x_u z_v - z_u x_v) \\
+        w_z & = x_u y_v - y_u x_v.
+        \end{aligned}
+        \]
+      </p>
+
+      <p>
+        An easier way to write (and remember) this is to write is a determinant:
+        \[ \vec u \times \vec v = \begin{vmatrix} \vec i & \vec j & \vec k \\ x_u & y_u & z_u \\ x_v & y_v & z_v
+        \end{vmatrix}. \]
+      </p>
+
+      <p>
+        For the case when $\vec u$ and $\vec v$ lay on the $xy$ plane, the formula becomes simply
+        \[ \vec u \times \vec v = \begin{vmatrix} \vec i & \vec j & \vec k \\ x_u & y_u & 0 \\ x_v & y_v & 0
+        \end{vmatrix} = \vec k \begin{vmatrix} x_u & y_u \\ x_v & y_v \end{vmatrix}. \]
+      </p>
+
+      <p>
+        One more handy property of the vector product is that its magnitude is equal to the area of the parallelogram
+        defined by the two vectors which are being multiplied.
+      </p>
+
+      <figure id="parallelogram">
+        <canvas></canvas>
+        <figcaption>
+          Parallelogram defined by the vectors.
+        </figcaption>
+      </figure>
+
+      <p>
+        Furthermore, the area of the triangle defined by the two vectors is half the parallelogram's area,
+        so we can utilize the vector product to compute it.
+      </p>
+
+    </section>
+
+    <section>
+      <h2>Perp product</h2>
+
+      <p>
+        There's another product, which is rarely introduced to students, called <b>perp product</b>.
+        It was defined by Hill in 1994. in the chapter called “The Pleasures of 'Perp Dot' Products” from the
+        “Graphic Gems IV” book.
+      </p>
+
+      <p>
+        It's also got some interesting properties, and it can be used to simplify some geometric algorithms,
+        such as finding the intersection between segments, rays and lines, which is the basis for any collision
+        detection algorithm. <!-- TODO Link after writing the article -->
+      </p>
+
+      <p>
+        Firstly, notice that vectors $(x, y)$ and $(-y, x)$ are perpendicular.
+        We can prove this by calculating their scalar product:
+        \[ (x, y) \cdot (-y, x) = -xy + xy = 0. \]
+      </p>
+
+      <p>
+        Let's introduce notation for computing the perpendicular vector from $\vec u = (x, y)$ as follows:
+        \[ \vec u ^ \perp = (x, y)^\perp = (-y, x). \]
+      </p>
+
+      <figure id="perp-prod">
+        <canvas></canvas>
+        <figcaption>
+          Vector
+          <span style="color: var(--color-red)">$\vec u$</span>
+          and its corresponding
+          <span style="color: var(--color-blue)">$\vec u^\perp$</span>.
+        </figcaption>
+      </figure>
+
+      <p>
+        Now, let's define the <b>perpendicular product</b> operation (shorter: perp product) between two vectors as
+        \[ \vec u \perp \vec v = \vec u ^ \perp \cdot \vec v. \]
+      </p>
+
+      <p>
+        In other words, the perp product of two vectors is their scalar product, where the first one has been rotated
+        90 degrees.
+      </p>
+
+    </section>
+
+  </article>
+</main>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css"
+      integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js"
+        integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js"
+        integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI"
+        crossorigin="anonymous"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},
+        {left: '$', right: '$', display: false},
+      ]
+    });
+  });
+</script>
+<script src="index.js"></script>
+
+</body>
+</html>
